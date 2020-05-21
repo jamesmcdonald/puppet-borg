@@ -1,4 +1,6 @@
-<%- | Integer $maxage = 129600 | -%>
+<%- | Integer $maxage = 129600,
+      String $sshtarget,
+| -%>
 #!/bin/bash
 
 job_start=$(date +%s)
