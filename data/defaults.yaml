@@ -1,3 +1,3 @@
 ---
-borg::client::borg_base:
-borg::client::borg_user:
+borg::client::borg_base: ""
+borg::client::borg_user: ""
