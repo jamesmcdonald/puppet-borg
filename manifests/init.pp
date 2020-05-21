@@ -9,6 +9,8 @@ class borg (
   Boolean $export_backup_resource = false,
   String $export_tag = 'borg',
   Optional[String] $ssh_public_key = undef,
+  String $prescript = '',
+  String $postscript = '',
 ){
   package {'borgbackup':
     ensure => present,
@@ -84,7 +86,10 @@ class borg (
   file {'/etc/cron.daily/backup':
     ensure  => file,
     mode    => '0755',
-    content => "#!/bin/bash\n/usr/local/sbin/backup\n",
+    content => epp('borg/cronjob.epp', {
+      prescript  => $prescript,
+      postscript => $postscript,
+    }),
   }
 
   if $export_backup_resource and defined($ssh_public_key) {

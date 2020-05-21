@@ -1,0 +1,7 @@
+#!/bin/bash
+
+<%= $prescript %>
+
+/usr/local/sbin/backup
+
+<%= $postscript %>
