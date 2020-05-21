@@ -1,0 +1,6 @@
+---
+version: 5
+default_hierarchy:
+  - name: 'defaults'
+    path: 'defaults.yaml'
+    data_hash: yaml_data
