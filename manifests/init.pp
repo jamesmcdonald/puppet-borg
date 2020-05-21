@@ -22,7 +22,7 @@ class borg (
   file {'/etc/borg/directories':
     ensure  => file,
     mode    => '0600',
-    content => epp('profile/borg/filelist.epp', {
+    content => epp('borg/filelist.epp', {
       files => $directories,
       }),
   }
@@ -30,7 +30,7 @@ class borg (
   file {'/etc/borg/excludes':
     ensure  => file,
     mode    => '0600',
-    content => epp('profile/borg/filelist.epp', {
+    content => epp('borg/filelist.epp', {
       files => $excludes,
       }),
   }
@@ -44,7 +44,7 @@ class borg (
   file {'/usr/local/sbin/backup':
     ensure => file,
     mode   => '0700',
-    content => epp('profile/borg/backup.sh.epp', {
+    content => epp('borg/backup.sh.epp', {
       maxage => $maxage,
       }),
   }
@@ -52,7 +52,7 @@ class borg (
   file {'/usr/local/sbin/restore':
     ensure  => file,
     mode    => '0700',
-    source  => 'puppet:///modules/profile/borg/restore.sh',
+    source  => 'puppet:///modules/borg/restore.sh',
   }
 
   if $manage_root_ssh_dir {
@@ -78,7 +78,7 @@ class borg (
   file {'/root/.ssh/config-borg':
     ensure => file,
     mode   => '0600',
-    source => 'puppet:///modules/profile/borg/sshconfig',
+    source => 'puppet:///modules/borg/sshconfig',
   }
 
   file {'/etc/cron.daily/backup':
