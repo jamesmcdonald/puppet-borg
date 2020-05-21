@@ -2,8 +2,8 @@
 define borg::client (
   $fqdn,
   $key,
-  $borg_base,
-  $borg_user,
+  $borg_base = '',
+  $borg_user = '',
 ){
   if $borg_base == '' or $borg_user == '' {
     fail('borg::client needs $borg_base and $borg_user defined')
