@@ -1,3 +1,4 @@
 ---
 borg::client::borg_base: ""
 borg::client::borg_user: ""
+borg::maxage: 129600

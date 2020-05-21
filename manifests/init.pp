@@ -2,7 +2,7 @@
 class borg (
   String $passphrase,
   String $server_address,
-  Integer $maxage = 129600,
+  Integer $maxage,
   Array[String] $directories = ['/etc', '/home', '/var/backups'],
   Array[String] $excludes = [],
   Boolean $manage_root_ssh_dir = false,
