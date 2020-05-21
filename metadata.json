@@ -1,4 +1,35 @@
 {
-    "name": "puppet-borg",
-    "data_provider": null
+  "name": "jamesmcdonald-borg",
+  "version": "0.1.0",
+  "author": "James McDonald <james@jamesmcdonald.com>",
+  "summary": "",
+  "license": "Apache-2.0",
+  "source": "",
+  "data_provider": "hiera",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.18.0",
+  "template-url": "pdk-default#1.18.0",
+  "template-ref": "tags/1.18.0-0-g095317c"
 }
