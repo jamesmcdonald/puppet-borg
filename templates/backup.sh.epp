@@ -1,0 +1,48 @@
+<%- | Integer $maxage = 129600 | -%>
+#!/bin/bash
+
+job_start=$(date +%s)
+
+NOISY=''
+[ -t 0 ] && NOISY='--stats --progress -v'
+
+PUSHGW_URL=https://pushgateway.app.mcrygh.net
+BORG_DIRS=$(</etc/borg/directories)
+BORG_REPO="borg:$(hostname -f)"
+case "$(uname -m)" in
+    arm*)
+        BORG_ENCRYPTION=repokey
+        ;;
+    *)
+        BORG_ENCRYPTION=repokey-blake2
+        ;;
+esac
+export BORG_PASSPHRASE="$(</etc/borg/passphrase)"
+
+# Try to read from the repo and init if it doesn't exit
+borg info $BORG_REPO >/dev/null
+if [[ $? != 0 ]]; then
+    borg init -e $BORG_ENCRYPTION $BORG_REPO
+    if [[ $? != 0 ]]; then
+        # TODO Make Prometheus sad
+        exit 1
+    fi
+fi
+
+borg create $NOISY $BORG_REPO::$(date +%Y-%m-%d-%s) $BORG_DIRS --exclude-from=/etc/borg/excludes --exclude-caches
+backup_status=$?
+# Only prune on success or warning
+if [[ $backup_status = 0 || $backup_status = 1 ]]; then
+    borg prune $NOISY $BORG_REPO --keep-daily=7 --keep-weekly=4 --keep-monthly=6 --keep-yearly=2
+fi
+
+curl -sS --data-binary @- ${PUSHGW_URL}/metrics/job/borg/instance/$(hostname -f) <<EOF
+# TYPE borg_completed gauge
+borg_completed 1
+# TYPE borg_status gauge
+borg_status $backup_status
+# TYPE borg_elapsed_seconds gauge
+borg_elapsed_seconds $(($(date +%s) - job_start))
+# TYPE borg_maxage gauge
+borg_maxage <%= $maxage %>
+EOF
