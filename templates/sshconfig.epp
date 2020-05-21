@@ -1,0 +1,4 @@
+Host <%= $sshtarget %>
+    Hostname <%= $server %>
+    User <%= $user %>
+    BatchMode yes

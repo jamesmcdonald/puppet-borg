@@ -1,6 +1,7 @@
 # Set up borg
 class borg (
   String $passphrase,
+  String $server_address,
   Integer $maxage = 129600,
   Array[String] $directories = ['/etc', '/home', '/var/backups'],
   Array[String] $excludes = [],
@@ -11,6 +12,8 @@ class borg (
   Optional[String] $ssh_public_key = undef,
   String $prescript = '',
   String $postscript = '',
+  String $sshtarget = 'borg',
+  String $server_user = 'borg',
 ){
   package {'borgbackup':
     ensure => present,
@@ -47,7 +50,8 @@ class borg (
     ensure => file,
     mode   => '0700',
     content => epp('borg/backup.sh.epp', {
-      maxage => $maxage,
+      maxage    => $maxage,
+      sshtarget => $sshtarget,
       }),
   }
 
@@ -78,9 +82,13 @@ class borg (
   }
 
   file {'/root/.ssh/config-borg':
-    ensure => file,
-    mode   => '0600',
-    source => 'puppet:///modules/borg/sshconfig',
+    ensure  => file,
+    mode    => '0600',
+    content => epp('borg/sshconfig.epp', {
+      sshtarget => $sshtarget,
+      server    => $server_address,
+      user      => $server_user,
+    }),
   }
 
   file {'/etc/cron.daily/backup':

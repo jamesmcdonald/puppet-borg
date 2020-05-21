@@ -8,7 +8,7 @@ NOISY=''
 
 PUSHGW_URL=https://pushgateway.app.mcrygh.net
 BORG_DIRS=$(</etc/borg/directories)
-BORG_REPO="borg:$(hostname -f)"
+BORG_REPO="<%= $sshtarget %>:$(hostname -f)"
 case "$(uname -m)" in
     arm*)
         BORG_ENCRYPTION=repokey
