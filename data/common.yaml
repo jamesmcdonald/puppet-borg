@@ -1,0 +1,3 @@
+---
+borg::client::borg_base: "flim"
+borg::client::borg_user: "borg"
