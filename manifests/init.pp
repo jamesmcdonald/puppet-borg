@@ -92,7 +92,7 @@ class borg (
     }),
   }
 
-  if $export_backup_resource and defined($ssh_public_key) {
+  if $export_backup_resource and $ssh_public_key != undef {
     @@borg::client {"borg-${facts['fqdn']}":
       fqdn => $facts['fqdn'],
       key  => $ssh_public_key,
