@@ -14,6 +14,7 @@ class borg (
   String $postscript = '',
   String $sshtarget = 'borg',
   String $server_user = 'borg',
+  String $pushgateway_url = '',
 ){
   package {'borgbackup':
     ensure => present,
@@ -50,8 +51,9 @@ class borg (
     ensure => file,
     mode   => '0700',
     content => epp('borg/backup.sh.epp', {
-      maxage    => $maxage,
-      sshtarget => $sshtarget,
+      maxage          => $maxage,
+      sshtarget       => $sshtarget,
+      pushgateway_url => $pushgateway_url,
       }),
   }
 

@@ -8,7 +8,7 @@ job_start=$(date +%s)
 NOISY=''
 [ -t 0 ] && NOISY='--stats --progress -v'
 
-PUSHGW_URL=https://pushgateway.app.mcrygh.net
+PUSHGW_URL=<%= $pushgateway_url %>
 BORG_DIRS=$(</etc/borg/directories)
 BORG_REPO="<%= $sshtarget %>:$(hostname -f)"
 case "$(uname -m)" in
@@ -37,6 +37,9 @@ backup_status=$?
 if [[ $backup_status = 0 || $backup_status = 1 ]]; then
     borg prune $NOISY $BORG_REPO --keep-daily=7 --keep-weekly=4 --keep-monthly=6 --keep-yearly=2
 fi
+
+# Send to Prometheus pushgateway if we have a URL set
+[[ -z "$PUSHGW_URL" ]] && exit
 
 curl -sS --data-binary @- ${PUSHGW_URL}/metrics/job/borg/instance/$(hostname -f) <<EOF
 # TYPE borg_completed gauge
