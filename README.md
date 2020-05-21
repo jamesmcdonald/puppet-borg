@@ -40,7 +40,7 @@ To use the exported resource feature you need to have
 To set up a client without exporting resources:
 ```
 class {'borg':
-    passphrase => 'This is not a secure way to specify your passphrase',
+    passphrase     => 'This is not a secure way to specify your passphrase',
     server_address => myborgserver.example.com,
 }
 ```
@@ -57,15 +57,33 @@ jobs. Then you can set up the exporting as follows:
 
 ```
 class {'borg':
-    passphrase => 'This is not a secure way to specify your passphrase',
-    server_address => myborgserver.example.com,
+    passphrase             => 'This is not a secure way to specify your passphrase',
+    server_address         => myborgserver.example.com,
     export_backup_resource => true,
-    ssh_public_key => 'ED25519 key material from /root/.ssh/id_ed25519.pub',
+    ssh_public_key         => 'ED25519 key material from /root/.ssh/id_ed25519.pub',
+    export_tag             => 'some-tag-for-this-server',
 }
 ```
 
 In my setup I expose the root public ssh key as a fact, so I can just use
-`$facts['rootsshpubkey']` here.
+`$facts['rootsshpubkey']` here. The `export_tag` is used by the server to
+collect the exported resources. The default is `borg` which should work fine if
+you're only setting up one server.
+
+To set up the server itself, use the `borg::server` class:
+
+```
+include borg::server
+```
+
+The server has sensible defaults which you can override as needed:
+
+```
+class {'borg::server':
+  base_dir   => '/largedisk/borg',
+  export_tag => 'some-tag-for-this-server',
+}
+```
 
 ## Usage
 
