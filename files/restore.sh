@@ -4,9 +4,23 @@ export BORG_PASSPHRASE="$(</etc/borg/passphrase)"
 BORG_REPO="borg:$(hostname -f)"
 
 function usage() {
-  echo "usage: $0 -h"
-  echo "       $0 -l [archive [path [path ...]]]"
-  echo "       $0 [-i] [-a archive] [path [path ...]]"
+  echo "usage: $0 [-i] [-a archive] [path [path ...]]"
+  echo "   or: $0 -l [archive [path [path ...]]]"
+  echo "   or: $0 -h"
+  echo
+  echo "Restore files from Borg backup. The first form restores files, and the second"
+  echo "allows you to list archives and files in the repository."
+  echo
+  echo "  -l            List available backups archives. You can pass the name of an"
+  echo "                archive to list its contents and optionally provide specific"
+  echo "                paths to list."
+  echo "  -i            Restore files in-place. By default the full path will be"
+  echo "                restored into the current directory. With this option files"
+  echo "                are restored under / and will overwrite existing files."
+  echo "  -a archive    Restore from a specific backup archive. By default the paths"
+  echo "                to restore are searched for in each archive starting with the"
+  echo "                most recent."
+  echo "  -h            Display this help and exit."
   exit 0
 }
 
