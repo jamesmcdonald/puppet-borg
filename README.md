@@ -205,8 +205,8 @@ class {'borg::server':
 
 ## Limitations
 
-Right now this module has only been tested on Debian, though it should also
-work nicely on Debian derivatives. Support for macOS is likely to happen soon.
+Right now this module has only been tested on Debian and macOS (client only).
+It should also work nicely on Debian derivatives.
 
 The way the parameters work could be a little nicer. Overriding
 `borg::server_user` and `borg::export_tag` in Hiera will also affect the
