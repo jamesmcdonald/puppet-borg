@@ -72,27 +72,32 @@ class borg (
     source => 'puppet:///modules/borg/restore.sh',
   }
 
+  $roothome = $facts['kernel'] ? {
+    'Darwin' => '/var/root',
+    default  => '/root',
+  }
+
   if $manage_root_ssh_dir {
-    file {'/root/.ssh':
+    file {"${roothome}/.ssh":
       ensure => directory,
       mode   => '0700',
     }
   }
 
   if $manage_root_ssh_config {
-    file {'/root/.ssh/config':
+    file {"${roothome}/.ssh/config":
       ensure => present,
       mode   => '0600',
     }
 
     file_line {'SSH wildcard config include':
       ensure => present,
-      path   => '/root/.ssh/config',
+      path   => "${roothome}/.ssh/config",
       line   => 'Include config-*',
     }
   }
 
-  file {'/root/.ssh/config-borg':
+  file {"${roothome}/.ssh/config-borg":
     ensure  => file,
     mode    => '0600',
     content => epp('borg/sshconfig.epp', {
