@@ -1,0 +1,4 @@
+borg::directories:
+  - /var/root
+  - /private/etc
+  - /Users
