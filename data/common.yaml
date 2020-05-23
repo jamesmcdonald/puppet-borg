@@ -1,4 +1,22 @@
 ---
-borg::client::borg_base: ""
-borg::client::borg_user: ""
 borg::maxage: 129600
+borg::directories:
+  - /etc
+  - /home
+  - /var/backups
+borg::excludes: []
+borg::manage_root_ssh_dir: false
+borg::manage_root_ssh_config: true
+borg::export_backup_resource: false
+borg::export_tag: borg
+borg::ssh_public_key: ~
+borg::prescript:
+borg::postscript:
+borg::sshtarget: borg
+borg::server_user: borg
+borg::pushgateway_url:
+
+borg::server::user: borg
+borg::server::base_dir: /var/lib/borg
+borg::server::export_tag: borg
+borg::server::borgpackage: borgbackup

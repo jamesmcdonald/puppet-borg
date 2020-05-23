@@ -1,9 +1,9 @@
 # Set up stuff on the borg server
 class borg::server (
-  String $user = 'borg',
-  String $base_dir = '/var/lib/borg',
-  String $export_tag = 'borg',
-  String $borgpackage = 'borgbackup',
+  String $user,
+  String $base_dir,
+  String $export_tag,
+  String $borgpackage,
 ){
   ensure_packages($borgpackage)
 
@@ -15,8 +15,8 @@ class borg::server (
   }
 
   user {$user:
-    ensure     => present,
-    home       => $base_dir,
+    ensure => present,
+    home   => $base_dir,
   }
 
   Borg::Client <<| tag==$export_tag |>> {

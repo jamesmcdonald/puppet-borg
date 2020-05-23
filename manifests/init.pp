@@ -1,20 +1,20 @@
-# Set up borg
+# Install and configure Borg.
 class borg (
   String $passphrase,
   String $server_address,
   Integer $maxage,
-  Array[String] $directories = ['/etc', '/home', '/var/backups'],
-  Array[String] $excludes = [],
-  Boolean $manage_root_ssh_dir = false,
-  Boolean $manage_root_ssh_config = true,
-  Boolean $export_backup_resource = false,
-  String $export_tag = 'borg',
-  Optional[String] $ssh_public_key = undef,
-  String $prescript = '',
-  String $postscript = '',
-  String $sshtarget = 'borg',
-  String $server_user = 'borg',
-  String $pushgateway_url = '',
+  Array[String] $directories,
+  Array[String] $excludes,
+  Boolean $manage_root_ssh_dir,
+  Boolean $manage_root_ssh_config,
+  Boolean $export_backup_resource,
+  String $export_tag,
+  Optional[String] $ssh_public_key,
+  String $prescript,
+  String $postscript,
+  String $sshtarget,
+  String $server_user,
+  String $pushgateway_url,
 ){
   package {'borgbackup':
     ensure => present,
