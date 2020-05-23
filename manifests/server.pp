@@ -1,9 +1,9 @@
 # Set up stuff on the borg server
 class borg::server (
-  String $user,
   String $base_dir,
-  String $export_tag,
-  String $borgpackage,
+  String $user = lookup('borg::server_user'),
+  String $export_tag = lookup('borg::export_tag'),
+  String $borgpackage = lookup('borg::borgpackage'),
 ){
   ensure_packages($borgpackage)
 

@@ -15,10 +15,9 @@ class borg (
   String $sshtarget,
   String $server_user,
   Optional[String] $pushgateway_url,
+  String $borgpackage,
 ){
-  package {'borgbackup':
-    ensure => present,
-  }
+  ensure_packages($borgpackage)
 
   file {'/etc/borg':
     ensure => directory,

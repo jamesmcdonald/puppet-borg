@@ -131,7 +131,7 @@ class {'borg::server':
 }
 ```
 
-Then you can automatically send client backups to a particular server just by
+Then you can automatically enable a client to send backups to a particular server just by
 setting `export_tag` to `clients1` or `clients2`.
 
 ### Customise client
@@ -192,8 +192,11 @@ class {'borg::server':
 Right now this module has only been tested on Debian, though it should also
 work nicely on Debian derivatives. Support for macOS is likely to happen soon.
 
-The way the parameters work could be a little nicer so there aren't 2 places to
-set things like the SSH username.
+The way the parameters work could be a little nicer. Overriding
+`borg::server_user` and `borg::export_tag` in Hiera will also affect the
+default values used by `borg::server`, so it's possible to set them in one
+place. I'm trying not to use a `params.pp` but it's not obvious how best to
+manage common parameters without it.
 
 ## Development
 

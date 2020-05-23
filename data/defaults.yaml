@@ -15,8 +15,6 @@ borg::postscript:
 borg::sshtarget: borg
 borg::server_user: borg
 borg::pushgateway_url:
+borg::borgpackage: borgbackup
 
-borg::server::user: borg
 borg::server::base_dir: /var/lib/borg
-borg::server::export_tag: borg
-borg::server::borgpackage: borgbackup
