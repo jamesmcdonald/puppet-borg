@@ -10,11 +10,11 @@ class borg (
   Boolean $export_backup_resource,
   String $export_tag,
   Optional[String] $ssh_public_key,
-  String $prescript,
-  String $postscript,
+  Optional[String] $prescript,
+  Optional[String] $postscript,
   String $sshtarget,
   String $server_user,
-  String $pushgateway_url,
+  Optional[String] $pushgateway_url,
 ){
   package {'borgbackup':
     ensure => present,

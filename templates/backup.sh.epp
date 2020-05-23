@@ -1,6 +1,6 @@
 <%- | Integer $maxage = 129600,
       String $sshtarget,
-      String $pushgateway_url = '',
+      Optional[String] $pushgateway_url = '',
 | -%>
 #!/bin/bash
 
