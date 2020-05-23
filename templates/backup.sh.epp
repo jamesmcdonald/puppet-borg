@@ -4,8 +4,11 @@
 | -%>
 #!/bin/bash
 
+# Back up to Borg server. This file is managed by Puppet.
+
 job_start=$(date +%s)
 
+# Give some progress information when run interactively
 NOISY=''
 [ -t 0 ] && NOISY='--stats --progress -v'
 
@@ -22,12 +25,12 @@ case "$(uname -m)" in
 esac
 export BORG_PASSPHRASE="$(</etc/borg/passphrase)"
 
-# Try to read from the repo and init if it doesn't exit
+# Try to read from the repo and init if it doesn't exist
 borg info $BORG_REPO >/dev/null
 if [[ $? != 0 ]]; then
     borg init -e $BORG_ENCRYPTION $BORG_REPO
     if [[ $? != 0 ]]; then
-        # TODO Make Prometheus sad
+        # TODO Report something to Prometheus that can be tracked
         exit 1
     fi
 fi
