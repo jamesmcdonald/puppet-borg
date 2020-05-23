@@ -48,6 +48,22 @@ class {'borg':
 To use the exported resource feature you need to have
 [PuppetDB](https://puppet.com/docs/puppetdb/latest/index.html) set up.
 
+On macOS you need to have [Homebrew](https://brew.sh/) set up as a package
+provider in puppet. There is a great [homebrew
+module](https://forge.puppet.com/thekevjames/homebrew) to support this. Install
+it, and add to your `site.pp` something like:
+
+```
+if $::osfamily == 'Darwin' {
+  Package { provider => 'brew' }
+  class {'homebrew':
+    user => $brew_user,
+  }
+}
+```
+
+Where `$brew_user` is typically the username of the Mac's primary user.
+
 ### Beginning with borg
 
 To set up a Borg client the only things you must specify are a passphrase and a

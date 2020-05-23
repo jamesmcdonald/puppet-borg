@@ -17,7 +17,17 @@ class borg (
   Optional[String] $pushgateway_url,
   String $borgpackage,
 ){
-  ensure_packages($borgpackage)
+
+  $package_options = $facts['kernel'] ? {
+    'Darwin' => {
+      ensure   => present,
+      provider => 'brewcask'
+    },
+    default  => {
+      ensure => present,
+    },
+  }
+  ensure_packages($borgpackage, $package_options)
 
   file {'/etc/borg':
     ensure => directory,
@@ -92,13 +102,37 @@ class borg (
     }),
   }
 
-  file {'/etc/cron.daily/backup':
-    ensure  => file,
-    mode    => '0755',
-    content => epp('borg/cronjob.epp', {
-      prescript  => $prescript,
-      postscript => $postscript,
-    }),
+  if $facts['kernel'] == 'Linux' {
+    file {'/etc/cron.daily/backup':
+      ensure  => file,
+      mode    => '0755',
+      content => epp('borg/cronjob.epp', {
+        prescript  => $prescript,
+        postscript => $postscript,
+      }),
+    }
+  }
+
+  if $facts['kernel'] == 'Darwin' {
+    $path = '/Library/LaunchDaemons/org.borgbackup.borg'
+    file {$path:
+      ensure  => file,
+      content => epp('borg/launchd_plist.epp'),
+      notify  => Exec["launchctl unload ${path}"],
+    }
+
+    exec {"launchctl unload ${path}":
+      path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+      onlyif      => "launchctl list | grep -qw \"${name}\"",
+      refreshonly => true,
+      before      => Exec["launchctl load ${path}"],
+    }
+
+    exec {"launchctl load ${path}":
+      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+      unless  => "launchctl list | grep -qw \"${name}\"",
+      require => File[$path],
+    }
   }
 
   if $export_backup_resource and $ssh_public_key != undef {
