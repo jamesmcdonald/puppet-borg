@@ -119,7 +119,8 @@ class borg (
   }
 
   if $facts['kernel'] == 'Darwin' {
-    $path = '/Library/LaunchDaemons/org.borgbackup.borg'
+    $label = 'org.borgbackup.borg'
+    $path = "/Library/LaunchDaemons/${label}.plist"
     file {$path:
       ensure  => file,
       content => epp('borg/launchd_plist.epp'),
@@ -128,14 +129,14 @@ class borg (
 
     exec {"launchctl unload ${path}":
       path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      onlyif      => "launchctl list | grep -qw \"${name}\"",
+      onlyif      => "launchctl list | grep -qw \"${label}\"",
       refreshonly => true,
       before      => Exec["launchctl load ${path}"],
     }
 
     exec {"launchctl load ${path}":
       path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      unless  => "launchctl list | grep -qw \"${name}\"",
+      unless  => "launchctl list | grep -qw \"${label}\"",
       require => File[$path],
     }
   }
