@@ -1,9 +1,9 @@
 # A borg client instance
 define borg::client (
-  $fqdn,
-  $key,
-  $borg_base = '',
-  $borg_user = '',
+  String $fqdn,
+  String $key,
+  String $borg_base = '',
+  String $borg_user = '',
 ){
   if $borg_base == '' or $borg_user == '' {
     fail('borg::client needs $borg_base and $borg_user defined')

@@ -48,8 +48,8 @@ class borg (
   }
 
   file {'/usr/local/sbin/backup':
-    ensure => file,
-    mode   => '0700',
+    ensure  => file,
+    mode    => '0700',
     content => epp('borg/backup.sh.epp', {
       maxage          => $maxage,
       sshtarget       => $sshtarget,
@@ -58,9 +58,9 @@ class borg (
   }
 
   file {'/usr/local/sbin/restore':
-    ensure  => file,
-    mode    => '0700',
-    source  => 'puppet:///modules/borg/restore.sh',
+    ensure => file,
+    mode   => '0700',
+    source => 'puppet:///modules/borg/restore.sh',
   }
 
   if $manage_root_ssh_dir {
