@@ -2,6 +2,6 @@
 
 <%= $prescript %>
 
-/usr/local/sbin/backup
+/usr/local/sbin/borg-backup
 
 <%= $postscript %>

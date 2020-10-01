@@ -16,12 +16,13 @@ class borg (
   String $server_user,
   Optional[String] $pushgateway_url,
   String $borgpackage,
+  Boolean $remove_legacy = false,
 ){
 
   $package_options = $facts['kernel'] ? {
     'Darwin' => {
       ensure   => present,
-      provider => 'brewcask'
+      provider => 'brewcask',
     },
     default  => {
       ensure => present,
@@ -56,7 +57,7 @@ class borg (
     content => $passphrase,
   }
 
-  file {'/usr/local/sbin/backup':
+  file {'/usr/local/sbin/borg-backup':
     ensure  => file,
     mode    => '0700',
     content => epp('borg/backup.sh.epp', {
@@ -66,7 +67,7 @@ class borg (
       }),
   }
 
-  file {'/usr/local/sbin/restore':
+  file {'/usr/local/sbin/borg-restore':
     ensure => file,
     mode   => '0700',
     source => 'puppet:///modules/borg/restore.sh',
@@ -108,7 +109,7 @@ class borg (
   }
 
   if $facts['kernel'] == 'Linux' {
-    file {'/etc/cron.daily/backup':
+    file {'/etc/cron.daily/borg-backup':
       ensure  => file,
       mode    => '0755',
       content => epp('borg/cronjob.epp', {
@@ -147,5 +148,9 @@ class borg (
       key  => $ssh_public_key,
       tag  => $export_tag,
     }
+  }
+
+  if $remove_legacy {
+    include borg::remove_legacy
   }
 }
